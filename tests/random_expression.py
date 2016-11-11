@@ -26,6 +26,7 @@ def random_data(only_ascii=False):
         data.append(c)
     return "".join(data)
 
+# Credit: http://stackoverflow.com/a/1477572/1343862
 
 def byte_range(first, last):
     return list(range(first, last+1))
