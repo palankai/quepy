@@ -14,7 +14,7 @@ Movie related regex.
 from refo import Plus, Question
 from quepy.dsl import HasKeyword
 from quepy.parsing import Lemma, Lemmas, Pos, QuestionTemplate, Particle
-from dsl import *
+from .dsl import *
 
 nouns = Plus(Pos("NN") | Pos("NNS") | Pos("NNP") | Pos("NNPS"))
 

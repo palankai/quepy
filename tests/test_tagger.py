@@ -19,49 +19,49 @@ from quepy import tagger
 class TestTagger(unittest.TestCase):
     def test_tagset_unicode(self):
         for tag in tagger.PENN_TAGSET:
-            self.assertIsInstance(tag, unicode)
+            self.assertIsInstance(tag, str)
 
     def test_word_encoding(self):
-        word = tagger.Word(token=u"æßđħłłþłłł@æµß",
-                           lemma=u"ŧłþłßæ#¶ŋħ~#~@",
-                           pos=u"øĸŋøħþ€ĸłþ€øæ«»¢")
+        word = tagger.Word(token="æßđħłłþłłł@æµß",
+                           lemma="ŧłþłßæ#¶ŋħ~#~@",
+                           pos="øĸŋøħþ€ĸłþ€øæ«»¢")
 
-        self.assertIsInstance(word.token, unicode)
-        self.assertEqual(word.token, u"æßđħłłþłłł@æµß")
-        self.assertIsInstance(word.lemma, unicode)
-        self.assertEqual(word.lemma, u"ŧłþłßæ#¶ŋħ~#~@")
-        self.assertIsInstance(word.pos, unicode)
-        self.assertEqual(word.pos, u"øĸŋøħþ€ĸłþ€øæ«»¢")
+        self.assertIsInstance(word.token, str)
+        self.assertEqual(word.token, "æßđħłłþłłł@æµß")
+        self.assertIsInstance(word.lemma, str)
+        self.assertEqual(word.lemma, "ŧłþłßæ#¶ŋħ~#~@")
+        self.assertIsInstance(word.pos, str)
+        self.assertEqual(word.pos, "øĸŋøħþ€ĸłþ€øæ«»¢")
 
     def test_word_wrong_encoding(self):
         # Token not unicode
-        self.assertRaises(ValueError, tagger.Word, "æßđħłłþłłł@æµß",
-                          u"ŧłþłßæ#¶ŋħ~#~@", u"øĸŋøħþ€ĸłþ€øæ«»¢")
+        self.assertRaises(ValueError, tagger.Word, "æßđħłłþłłł@æµß".encode(),
+                          "ŧłþłßæ#¶ŋħ~#~@", "øĸŋøħþ€ĸłþ€øæ«»¢")
         # Lemma not unicode
-        self.assertRaises(ValueError, tagger.Word, u"æßđħłłþłłł@æµß",
-                          "ŧłþłßæ#¶ŋħ~#~@", u"øĸŋøħþ€ĸłþ€øæ«»¢")
+        self.assertRaises(ValueError, tagger.Word, "æßđħłłþłłł@æµß",
+                          "ŧłþłßæ#¶ŋħ~#~@".encode(), "øĸŋøħþ€ĸłþ€øæ«»¢")
         # Pos not unicode
-        self.assertRaises(ValueError, tagger.Word, u"æßđħłłþłłł@æµß",
-                          u"ŧłþłßæ#¶ŋħ~#~@", "øĸŋøħþ€ĸłþ€øæ«»¢")
+        self.assertRaises(ValueError, tagger.Word, "æßđħłłþłłł@æµß",
+                          "ŧłþłßæ#¶ŋħ~#~@", "øĸŋøħþ€ĸłþ€øæ«»¢".encode())
 
     def test_word_attrib_set(self):
-        word = tagger.Word(u"æßđħłłþłłł@æµß")
-        word.lemma = u"ŧłþłßæ#¶ŋħ~#~@"
-        word.pos = u"øĸŋøħþ€ĸłþ€øæ«»¢"
+        word = tagger.Word("æßđħłłþłłł@æµß")
+        word.lemma = "ŧłþłßæ#¶ŋħ~#~@"
+        word.pos = "øĸŋøħþ€ĸłþ€øæ«»¢"
 
-        self.assertIsInstance(word.token, unicode)
-        self.assertEqual(word.token, u"æßđħłłþłłł@æµß")
-        self.assertIsInstance(word.lemma, unicode)
-        self.assertEqual(word.lemma, u"ŧłþłßæ#¶ŋħ~#~@")
-        self.assertIsInstance(word.pos, unicode)
-        self.assertEqual(word.pos, u"øĸŋøħþ€ĸłþ€øæ«»¢")
+        self.assertIsInstance(word.token, str)
+        self.assertEqual(word.token, "æßđħłłþłłł@æµß")
+        self.assertIsInstance(word.lemma, str)
+        self.assertEqual(word.lemma, "ŧłþłßæ#¶ŋħ~#~@")
+        self.assertIsInstance(word.pos, str)
+        self.assertEqual(word.pos, "øĸŋøħþ€ĸłþ€øæ«»¢")
 
     def test_word_wrong_attrib_set(self):
-        word = tagger.Word(u"æßđħłłþłłł@æµß")
+        word = tagger.Word("æßđħłłþłłł@æµß")
 
         # Token not unicode
-        self.assertRaises(ValueError, setattr, word, "token", "æßđħłłþłłł@æµß")
+        self.assertRaises(ValueError, setattr, word, "token", "æßđħłłþłłł@æµß".encode())
         # Lemma not unicode
-        self.assertRaises(ValueError, setattr, word, "lemma", "ŧłþłßæ#¶ŋħ~#~@")
+        self.assertRaises(ValueError, setattr, word, "lemma", "ŧłþłßæ#¶ŋħ~#~@".encode())
         # Pos not unicode
-        self.assertRaises(ValueError, setattr, word, "pos", "øĸŋøħþ€ĸłþ€øæ«»¢")
+        self.assertRaises(ValueError, setattr, word, "pos", "øĸŋøħþ€ĸłþ€øæ«»¢".encode())

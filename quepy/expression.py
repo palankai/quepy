@@ -90,10 +90,33 @@ The reasons are:
 
 from collections import defaultdict
 from copy import deepcopy
+from functools import total_ordering
 
 
 def isnode(x):
     return isinstance(x, int)
+
+
+@total_ordering
+class NullType:
+    """
+    Replacement of python 2 None object which was comparable
+    """
+
+    def __le__(self, other):
+        return True
+
+    def __eq__(self, other):
+        return isinstance(other, NullType)
+
+    def __bool__(self):
+        return False
+
+    def __repr__(self):
+        return 'Null'
+
+
+Null = NullType()
 
 
 class Expression(object):
@@ -146,6 +169,8 @@ class Expression(object):
         the new head instead of the opposite (some relations are not
         commutative).
         """
+        if relation is None:
+            relation = Null
         oldhead = self.head
         self.head = self._add_node()
         if reverse:
@@ -167,6 +192,10 @@ class Expression(object):
         data fields to a node.
         To relate nodes in a graph use a combination of merge and decapitate.
         """
+        if relation is None:
+            relation = Null
+        if value is None:
+            value = Null
         assert not isnode(value)
         self.nodes[self.head].append((relation, value))
 
@@ -174,7 +203,7 @@ class Expression(object):
         """
         Iterates the indexes (the unique identifiers) of the Expression nodes.
         """
-        return xrange(len(self.nodes))
+        return range(len(self.nodes))
 
     def iter_edges(self, node):
         """

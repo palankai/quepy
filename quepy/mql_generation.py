@@ -25,13 +25,13 @@ def safely_to_unicode(x):
     Given an "edge" (a relation) or "a data" from an `Expression` graph
     transform it into a unicode string fitted for insertion into a MQL query.
     """
-    if isinstance(x, unicode):
+    if isinstance(x, str):
         return x
     if isinstance(x, str):
         return encoding_flexible_conversion(x)
     if isinstance(x, IsRelatedTo):
-        return u"/type/reflect/any_master"
-    return unicode(x)  # FIXME: Any object is unicode-able, this is error prone
+        return "/type/reflect/any_master"
+    return str(x)  # FIXME: Any object is unicode-able, this is error prone
 
 
 def to_bidirected_graph(e):
@@ -45,7 +45,7 @@ def to_bidirected_graph(e):
         for relation, other in e.iter_edges(node):
             relation = safely_to_unicode(relation)
             if isnode(other):
-                graph[other].append((u"!" + relation, node))
+                graph[other].append(("!" + relation, node))
             else:
                 other = safely_to_unicode(other)
             graph[node].append((relation, other))

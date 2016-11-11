@@ -26,8 +26,8 @@ class TestQuepyApp(unittest.TestCase):
         question = "What is this?"
         target, query, userdata = self.app.get_query(question)
 
-        self.assertIsInstance(target, unicode)
-        self.assertIsInstance(query, unicode)
+        self.assertIsInstance(target, str)
+        self.assertIsInstance(query, str)
 
     def test_get_user_data(self):
         question = "user data"

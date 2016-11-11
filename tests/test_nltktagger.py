@@ -19,7 +19,7 @@ from quepy.tagger import Word
 
 class TestNLTKTagger(unittest.TestCase):
     def test_word_output(self):
-        output = nltktagger.run_nltktagger(u"this is a test case «¢ðßæŋħħ")
+        output = nltktagger.run_nltktagger("this is a test case «¢ðßæŋħħ")
 
         self.assertIsInstance(output, list)
         for word in output:
@@ -27,4 +27,4 @@ class TestNLTKTagger(unittest.TestCase):
 
     def tests_wrong_input(self):
         self.assertRaises(ValueError, nltktagger.run_nltktagger,
-                          "this is not unicode")
+                          "this is not unicode".encode())

@@ -13,7 +13,7 @@ Options:
 
 import json
 import quepy
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from docopt import docopt
 
 service_url = 'https://www.googleapis.com/freebase/v1/mqlread'
@@ -22,8 +22,8 @@ freebase = quepy.install("freebase")
 
 def request(query):
     params = {'query': query}
-    url = service_url + '?' + urllib.urlencode(params)
-    responses = json.loads(urllib.urlopen(url).read())
+    url = service_url + '?' + urllib.parse.urlencode(params)
+    responses = json.loads(urllib.request.urlopen(url).read())
     return responses
 
 
@@ -54,14 +54,14 @@ if __name__ == "__main__":
     args = docopt(__doc__)
     question = " ".join(args["<question>"])
     target, query, metadata = freebase.get_query(question)
-    print query
+    print(query)
 
     if args["--request"]:
-        print
+        print()
         responses = request(query)
         if "error" in responses:
-            print responses
+            print(responses)
             exit()
         else:
             for response in result_from_responses(responses, target):
-                print response
+                print(response)

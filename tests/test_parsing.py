@@ -26,13 +26,13 @@ class TestQuestionTemplate(unittest.TestCase):
         self.mockrule = Mockrule
 
         class SomeRegex(QuestionTemplate):
-            regex = Lemma(u"hello")
+            regex = Lemma("hello")
 
             def interpret(self, match):
                 return Mockrule
 
         class SomeRegexWithData(QuestionTemplate):
-            regex = Lemma(u"hello")
+            regex = Lemma("hello")
 
             def interpret(self, match):
                 return Mockrule, 42
@@ -41,28 +41,28 @@ class TestQuestionTemplate(unittest.TestCase):
         self.regex_with_data = SomeRegexWithData()
 
     def test_match(self):
-        words = [Word(u"hi", u"hello")]
+        words = [Word("hi", "hello")]
         ir, userdata = self.regexinstance.get_interpretation(words)
         self.assertTrue(ir is self.mockrule)
         self.assertEqual(userdata, None)
 
     def test_no_match(self):
-        words = [Word(u"hi", u"hello"), Word(u"girl", u"girl")]
+        words = [Word("hi", "hello"), Word("girl", "girl")]
         ir, userdata = self.regexinstance.get_interpretation(words)
         self.assertEqual(ir, None)
         self.assertEqual(userdata, None)
 
     def test_user_data(self):
-        words = [Word(u"hi", u"hello")]
+        words = [Word("hi", "hello")]
         _, userdata = self.regex_with_data.get_interpretation(words)
         self.assertEqual(userdata, 42)
 
     def test_no_ir(self):
         class SomeRegex(QuestionTemplate):
-            regex = Lemma(u"hello")
+            regex = Lemma("hello")
 
         regexinstance = SomeRegex()
-        words = [Word(u"hi", u"hello")]
+        words = [Word("hi", "hello")]
         self.assertRaises(NotImplementedError,
                           regexinstance.get_interpretation, words)
 
@@ -72,7 +72,7 @@ class TestQuestionTemplate(unittest.TestCase):
                 return Mockrule, "YES!"
 
         regexinstance = SomeRegex()
-        words = [Word(u"hi", u"hello")]
+        words = [Word("hi", "hello")]
         ir, userdata = regexinstance.get_interpretation(words)
         self.assertTrue(ir is Mockrule)
         self.assertEqual(userdata, "YES!")
@@ -82,7 +82,7 @@ class TestQuestionTemplate(unittest.TestCase):
             def interpret(self, match):
                 return match
 
-        words = [Word(u"|@€đ€łł@ð«|µnþ", u"hello"), Word(u"a", u"b", u"c")]
+        words = [Word("|@€đ€łł@ð«|µnþ", "hello"), Word("a", "b", "c")]
         match, _ = SomeRegex().get_interpretation(words)
         self.assertEqual(words, match.words)
 
@@ -90,35 +90,35 @@ class TestQuestionTemplate(unittest.TestCase):
 class TestParticle(unittest.TestCase):
     def setUp(self):
         class Person(Particle):
-            regex = Lemma(u"Jim") | Lemma(u"Tonny")
+            regex = Lemma("Jim") | Lemma("Tonny")
 
             def interpret(self, match):
                 return match
 
         class PersonRegex(QuestionTemplate):
-            regex = Person() + Lemma(u"be") + Person(u"another")
+            regex = Person() + Lemma("be") + Person("another")
 
             def interpret(self, match):
                 return match
 
         class PersonAsset(Person):
-            regex = Person() + Lemma(u"'s") + Lemma(u"car")
+            regex = Person() + Lemma("'s") + Lemma("car")
 
         class NestedParticleRegex(PersonRegex):
-            regex = PersonAsset() + Lemma(u"be") + Person(u"another")
+            regex = PersonAsset() + Lemma("be") + Person("another")
 
         self.personregex = PersonRegex()
         self.nestedregex = NestedParticleRegex()
 
     def test_attrs(self):
-        words = [Word(x, x) for x in u"Jim be Tonny".split()]
+        words = [Word(x, x) for x in "Jim be Tonny".split()]
         match, _ = self.personregex.get_interpretation(words)
         self.assertEqual(match.another.words[0], words[-1])
         self.assertEqual(match.person.words[0], words[0])
         self.assertRaises(AttributeError, lambda: match.pirulo)
 
     def test_nested_particle(self):
-        words = [Word(x, x) for x in u"Jim 's car be Tonny".split()]
+        words = [Word(x, x) for x in "Jim 's car be Tonny".split()]
         match, _ = self.nestedregex.get_interpretation(words)
         self.assertEqual(match.personasset.words[0], words[0])
         self.assertRaises(AttributeError, lambda: match.personasset.another)

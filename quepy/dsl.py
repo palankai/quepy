@@ -45,7 +45,7 @@ class FixedType(Expression):
     """
 
     fixedtype = None
-    fixedtyperelation = u"rdf:type"  # FIXME: sparql specific
+    fixedtyperelation = "rdf:type"  # FIXME: sparql specific
 
     def __init__(self):
         super(FixedType, self).__init__()
@@ -75,7 +75,7 @@ class FixedDataRelation(Expression):
         self.relation = encoding_flexible_conversion(self.relation)
         if self.language is not None:
             self.language = encoding_flexible_conversion(self.language)
-            data = u"\"{0}\"@{1}".format(data, self.language)
+            data = "\"{0}\"@{1}".format(data, self.language)
         self.add_data(self.relation, data)
 
 
@@ -84,7 +84,7 @@ class HasKeyword(FixedDataRelation):
     Abstraction of an information retrieval key, something standarized used
     to look up things in the database.
     """
-    relation = u"quepy:Keyword"
+    relation = "quepy:Keyword"
 
     def __init__(self, data):
         data = self.sanitize(data)

@@ -11,38 +11,38 @@ from quepy.encodingpolicy import assert_valid_encoding
 
 
 def escape(x, add_quotes=True):
-    x = unicode(x)
-    x = x.replace(u" ", u"_")
-    x = x.replace(u"\n", u"")
-    x = x.replace(u"\00", u"")
-    x = x.replace(u"[", u"")
-    x = x.replace(u"]", u"")
-    x = x.replace(u"\\", u"")
+    x = str(x)
+    x = x.replace(" ", "_")
+    x = x.replace("\n", "")
+    x = x.replace("\00", "")
+    x = x.replace("[", "")
+    x = x.replace("]", "")
+    x = x.replace("\\", "")
     if x.count("\""):
-        x = x.replace(u"\"", u"\\\"")
+        x = x.replace("\"", "\\\"")
         if add_quotes:
-            x = u'"' + x + u'"'
+            x = '"' + x + '"'
     return x
 
 
 def adapt(x):
     if isnode(x):
-        x = u"x{}".format(x)
+        x = "x{}".format(x)
         return x
-    if isinstance(x, basestring):
+    if isinstance(x, (str, bytes)):
         assert_valid_encoding(x)
         x = escape(x)
-        if x.startswith(u"\""):
+        if x.startswith("\""):
             return x
-        return u'"{}"'.format(x)
-    return unicode(x)
+        return '"{}"'.format(x)
+    return str(x)
 
 
 def expression_to_dot(e):
-    d = {u"rdf:type": dot_type,
+    d = {"rdf:type": dot_type,
          HasKeyword.relation: dot_keyword,
-         IsRelatedTo: lambda x, y: dot_arc(x, u"", y)}
-    s = u"digraph G {{\n{0} [shape=house];\n{1}\n}}\n"
+         IsRelatedTo: lambda x, y: dot_arc(x, "", y)}
+    s = "digraph G {{\n{0} [shape=house];\n{1}\n}}\n"
     xs = []
     for node in e.iter_nodes():
         for relation, other in e.iter_edges(node):
@@ -55,35 +55,35 @@ def expression_to_dot(e):
             else:
                 x = dot_arc(node1, relation, node2)
             xs.append(x)
-    return None, s.format(adapt(e.head), u"".join(xs))
+    return None, s.format(adapt(e.head), "".join(xs))
 
 
 def dot_arc(a, label, b):
-    assert u" " not in a and u" " not in b
-    assert u"\n" not in a + label + b
-    return u"{0} -> {1} [label=\"{2}\"];\n".format(a, b, label)
+    assert " " not in a and " " not in b
+    assert "\n" not in a + label + b
+    return "{0} -> {1} [label=\"{2}\"];\n".format(a, b, label)
 
 
 def dot_type(a, t):
-    s = u"{0} [shape=box];\n".format(t)
-    return s + u"{0} -> {1} [color=red, arrowhead=empty];".format(a, t)
+    s = "{0} [shape=box];\n".format(t)
+    return s + "{0} -> {1} [color=red, arrowhead=empty];".format(a, t)
 
 
 def dot_attribute(a, key):
     blank = id(a)
-    s = u"{0} [shape=none label={1}];\n".format(blank, key)
-    return s + u"{0} -> {1};".format(a, blank)
+    s = "{0} [shape=none label={1}];\n".format(blank, key)
+    return s + "{0} -> {1};".format(a, blank)
 
 
 def dot_keyword(a, key):
-    blank = u"{0:.30f}".format(random.random())
-    blank = u"blank" + blank.replace(u".", u"")
-    s = u"{0} [shape=none label={1}];\n".format(blank, key)
-    return s + u"{0} -> {1} [style=dashed];".format(a, blank)
+    blank = "{0:.30f}".format(random.random())
+    blank = "blank" + blank.replace(".", "")
+    s = "{0} [shape=none label={1}];\n".format(blank, key)
+    return s + "{0} -> {1} [style=dashed];".format(a, blank)
 
 
 def dot_fixed_type(a, fixedtype):
-    blank = u"{0:.30f}".format(random.random())
-    blank = u"blank" + blank.replace(u".", u"")
-    s = u"{0} [shape=box label={1}];\n".format(blank, fixedtype)
-    return s + u"{0} -> {1} [color=red, arrowhead=empty];".format(a, blank)
+    blank = "{0:.30f}".format(random.random())
+    blank = "blank" + blank.replace(".", "")
+    s = "{0} [shape=box label={1}];\n".format(blank, fixedtype)
+    return s + "{0} -> {1} [color=red, arrowhead=empty];".format(a, blank)

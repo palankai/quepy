@@ -34,5 +34,5 @@ def get_code(expression, language):
     elif language == "mql":
         return generate_mql(expression)
     else:
-        message = u"Language '{}' is not supported"
+        message = "Language '{}' is not supported"
         raise ValueError(message.format(language))

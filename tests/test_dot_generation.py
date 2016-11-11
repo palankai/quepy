@@ -6,7 +6,7 @@
 #
 # Authors: Rafael Carrascosa <rcarrascosa@machinalis.com>
 #          Gonzalo Garcia Berrotaran <ggarcia@machinalis.com>
-
+import array
 import unittest
 import tempfile
 import subprocess
@@ -38,26 +38,26 @@ def gen_fixedrelation(rel, e):
 class TestDotGeneration(unittest.TestCase):
 
     def _standard_check(self, s, e):
-        self.assertIsInstance(s, unicode)
-        vs = [u"x{}".format(i) for i in xrange(len(e))]
+        self.assertIsInstance(s, str)
+        vs = ["x{}".format(i) for i in range(len(e))]
         for var in vs:
             self.assertIn(var, s)
 
     def test_dot_takes_unicode(self):
-        e = gen_fixedtype(u"·̣─@łæßð~¶½")
-        e += gen_datarel(u"tµŧurułej€", u"←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
+        e = gen_fixedtype("·̣─@łæßð~¶½")
+        e += gen_datarel("tµŧurułej€", "←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
         _, s = expression_to_dot(e)
         self._standard_check(s, e)
 
     def test_dot_takes_fails_ascii1(self):
-        e = gen_fixedtype("a")
-        e += gen_datarel("b", "c")
+        e = gen_fixedtype(b"a")
+        e += gen_datarel(b"b", b"c")
         e = gen_fixedrelation("d", e)
         self.assertRaises(ValueError, expression_to_dot, e)
 
     def test_dot_takes_fails_ascii2(self):
-        e = gen_fixedtype("·̣─@łæßð~¶½")
-        e += gen_datarel("tµŧurułej€", "←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
+        e = gen_fixedtype("·̣─@łæßð~¶½".encode())
+        e += gen_datarel("tµŧurułej€".encode(), "←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@".encode())
         self.assertRaises(ValueError, expression_to_dot, e)
 
     def test_dot_stress(self):
@@ -66,17 +66,17 @@ class TestDotGeneration(unittest.TestCase):
         dot_file = tempfile.NamedTemporaryFile()
         cmdline = "dot %s" % dot_file.name
         msg = "dot returned error code {}, check {} input file."
-        for _ in xrange(100):
+        for _ in range(100):
             expression = random_expression()
             _, dot_string = expression_to_dot(expression)
             with open(dot_file.name, "w") as filehandler:
-                filehandler.write(dot_string.encode("utf-8"))
+                filehandler.write(dot_string)
 
             try:
-                retcode = subprocess.call(cmdline.split(),
-                                          stdout=tempfile.TemporaryFile())
+                with tempfile.TemporaryFile() as fp:
+                    retcode = subprocess.call(cmdline.split(), stdout=fp)
             except OSError:
-                print "Warning: the program 'dot' was not found, tests skipped"
+                print("Warning: the program 'dot' was not found, tests skipped")
                 return
             if retcode != 0:
                 dot_file.delete = False

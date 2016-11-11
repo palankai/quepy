@@ -34,16 +34,16 @@ class TestMqlGeneration(unittest.TestCase):
             if isinstance(x, list):
                 self.assertIsInstance(x[0], dict)
                 self.assertEqual(len(x), 1)
-                for key, value in x[0].iteritems():
-                    self.assertIsInstance(key, unicode)
+                for key, value in x[0].items():
+                    self.assertIsInstance(key, str)
                     q.append(value)
             else:
-                self.assertIsInstance(x, unicode)
+                self.assertIsInstance(x, str)
 
     def _valid_target_for_query(self, target, query):
         self.assertIsInstance(target, list)
         for entry in target:
-            self.assertIsInstance(entry, unicode)
+            self.assertIsInstance(entry, str)
         x = self._get_json(query)
         if x is None:
             return
@@ -58,7 +58,7 @@ class TestMqlGeneration(unittest.TestCase):
 
     def test_mql_stress(self):
         seed("playadito vs amanda... 3 focas")
-        for _ in xrange(100):
+        for _ in range(100):
             expression = random_expression()
             target, mql = generate_mql(expression)
             self._valid_mql_query(mql)

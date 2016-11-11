@@ -25,16 +25,16 @@ def encoding_flexible_conversion(string, complain=False):
     converting a string that had to be on the right encoding.
     """
 
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         return string
     try:
         ustring = string.decode(settings.DEFAULT_ENCODING)
     except UnicodeError:
-        message = u"Argument must be unicode or {}"
+        message = "Argument must be unicode or {}"
         raise ValueError(message.format(settings.DEFAULT_ENCODING))
     if complain:
-        logger.warning(u"Forced to guess the encoding of {!r}, please "
-                       u"provide a unicode string instead".format(string))
+        logger.warning("Forced to guess the encoding of {!r}, please "
+                       "provide a unicode string instead".format(string))
     return ustring
 
 
@@ -44,5 +44,5 @@ def assert_valid_encoding(string):
     ValueError exception.
     """
 
-    if not isinstance(string, unicode):
-        raise ValueError(u"Argument must be unicode")
+    if not isinstance(string, str):
+        raise ValueError("Argument must be unicode")

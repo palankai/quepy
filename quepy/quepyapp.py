@@ -30,16 +30,16 @@ def install(app_name):
     """
 
     module_paths = {
-        u"settings": u"{0}.settings",
-        u"parsing": u"{0}",
+        "settings": "{0}.settings",
+        "parsing": "{0}",
     }
     modules = {}
 
-    for module_name, module_path in module_paths.iteritems():
+    for module_name, module_path in module_paths.items():
         try:
             modules[module_name] = import_module(module_path.format(app_name))
-        except ImportError, error:
-            message = u"Error importing {0!r}: {1}"
+        except ImportError as error:
+            message = "Error importing {0!r}: {1}"
             raise ImportError(message.format(module_name, error))
 
     return QuepyApp(**modules)
@@ -122,10 +122,10 @@ class QuepyApp(object):
         question = encoding_flexible_conversion(question)
         for expression, userdata in self._iter_compiled_forms(question):
             target, query = generation.get_code(expression, self.language)
-            message = u"Interpretation {1}: {0}"
+            message = "Interpretation {1}: {0}"
             logger.debug(message.format(str(expression),
                          expression.rule_used))
-            logger.debug(u"Query generated: {0}".format(query))
+            logger.debug("Query generated: {0}".format(query))
             yield target, query, userdata
 
     def _iter_compiled_forms(self, question):
@@ -136,12 +136,12 @@ class QuepyApp(object):
         try:
             words = list(self.tagger(question))
         except TaggingError:
-            logger.warning(u"Can't parse tagger's output for: '%s'",
+            logger.warning("Can't parse tagger's output for: '%s'",
                            question)
             return
 
-        logger.debug(u"Tagged question:\n" +
-                     u"\n".join(u"\t{}".format(w for w in words)))
+        logger.debug("Tagged question:\n" +
+                     "\n".join("\t{}".format(w for w in words)))
 
         for rule in self.rules:
             expression, userdata = rule.get_interpretation(words)

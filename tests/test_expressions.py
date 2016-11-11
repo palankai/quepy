@@ -13,7 +13,7 @@ Tests for expressions.
 """
 
 import unittest
-from quepy.expression import Expression, isnode
+from quepy.expression import Expression, isnode, Null
 
 
 def make_canonical_expression(e):
@@ -57,7 +57,7 @@ class ExpressionTests(object):
         self.assertNotEqual(len(self.e), 0)
 
     def test_add_data(self):
-        rel = u"|@·~½"
+        rel = "|@·~½"
         data = "somedata"
         self.e.add_data(rel, data)
         xs = list(self.e.iter_edges(self.e.get_head()))
@@ -121,7 +121,7 @@ class TestExpression2(unittest.TestCase, ExpressionTests):
         self.e = Expression()
         self.e.add_data("key", "1")
         self.e.add_data("key", "2")
-        self.e.add_data(u"~·~··@↓", None)
+        self.e.add_data("~·~··@↓", None)
         self.e.add_data(None, None)
 
 
@@ -129,7 +129,7 @@ class TestExpression3(unittest.TestCase, ExpressionTests):
     def setUp(self):
         self.e = Expression()
         self.e.add_data("key", "1")
-        self.e.decapitate(u"µ")
+        self.e.decapitate("µ")
         self.e.add_data("a", "2")
         self.e.add_data("a", "3")
         self.e.add_data(None, None)
@@ -145,7 +145,7 @@ class TestExpression4(unittest.TestCase, ExpressionTests):
         other.add_data(0, "1")
         other.add_data(2, "3")
         other.decapitate("iuju")
-        for _ in xrange(5):
+        for _ in range(5):
             self.e.decapitate("nouu")
             self.e += other
 
@@ -237,14 +237,14 @@ class TestCanon97(unittest.TestCase, CanonNotEqualTest):
         other = Expression()
         other.decapitate("onelevel")
         self.a = Expression()
-        for _ in xrange(5):
+        for _ in range(5):
             self.a.decapitate("step")
             self.a += other
 
         other = Expression()
         other.decapitate("onelevel", reverse=True)
         self.b = Expression()
-        for _ in xrange(5):
+        for _ in range(5):
             self.b.decapitate("step")
             self.b += other
 
@@ -255,7 +255,7 @@ class TestCanon98(unittest.TestCase, CanonNotEqualTest):
         other.add_data(0, "data")
         other.decapitate("onelevel")
         self.a = Expression()
-        for _ in xrange(5):
+        for _ in range(5):
             self.a.decapitate("step")
             self.a += other
 
@@ -263,7 +263,7 @@ class TestCanon98(unittest.TestCase, CanonNotEqualTest):
         other.add_data(0, "data")
         other.decapitate("onelevel", reverse=True)
         self.b = Expression()
-        for _ in xrange(5):
+        for _ in range(5):
             self.b.decapitate("step")
             self.b += other
 

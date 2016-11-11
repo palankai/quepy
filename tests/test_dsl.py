@@ -17,7 +17,7 @@ class TestDSL(unittest.TestCase):
     def test_fixed_relation(self):
 
         class MyFixedRelation(FixedRelation):
-            relation = u"uranium:blowtorch"
+            relation = "uranium:blowtorch"
 
         empty = Expression()
         fixedinstance = MyFixedRelation(empty)
@@ -25,13 +25,13 @@ class TestDSL(unittest.TestCase):
         head = fixedinstance.get_head()
         relations = [x[0] for x in fixedinstance.iter_edges(head)]
 
-        self.assertIn(u"uranium:blowtorch", relations)
+        self.assertIn("uranium:blowtorch", relations)
 
     def test_fixed_type(self):
 
         class MyFixedType(FixedType):
-            fixedtype = u"uranium:blowtorch"
-            fixedtyperelation = u"rdf:type"
+            fixedtype = "uranium:blowtorch"
+            fixedtyperelation = "rdf:type"
 
         fixedinstance = MyFixedType()
 
@@ -39,38 +39,38 @@ class TestDSL(unittest.TestCase):
         edges = list(fixedinstance.iter_edges(head))
 
         self.assertEqual(len(edges), 1)
-        self.assertIsInstance(edges[0][0], unicode)
-        self.assertEqual(edges[0][0], u"rdf:type")
-        self.assertIsInstance(edges[0][1], unicode)
-        self.assertEqual(edges[0][1], u"uranium:blowtorch")
+        self.assertIsInstance(edges[0][0], str)
+        self.assertEqual(edges[0][0], "rdf:type")
+        self.assertIsInstance(edges[0][1], str)
+        self.assertEqual(edges[0][1], "uranium:blowtorch")
 
     def test_fixed_data_relation(self):
 
         class MyFixedDataRelation(FixedDataRelation):
-            relation = u"uranium:blowtorch"
+            relation = "uranium:blowtorch"
 
-        fixedinstance = MyFixedDataRelation(u"soplete")
+        fixedinstance = MyFixedDataRelation("soplete")
         head = fixedinstance.get_head()
         edges = list(fixedinstance.iter_edges(head))
 
         self.assertEqual(len(edges), 1)
-        self.assertIsInstance(edges[0][0], unicode)
-        self.assertEqual(edges[0][0], u"uranium:blowtorch")
-        self.assertIsInstance(edges[0][1], unicode)
-        self.assertEqual(edges[0][1], u"soplete")
+        self.assertIsInstance(edges[0][0], str)
+        self.assertEqual(edges[0][0], "uranium:blowtorch")
+        self.assertIsInstance(edges[0][1], str)
+        self.assertEqual(edges[0][1], "soplete")
 
     def test_has_keyword(self):
 
-        HasKeyword.relation = u"uranium:keyword"
-        keywordinstance = HasKeyword(u"soplete")
+        HasKeyword.relation = "uranium:keyword"
+        keywordinstance = HasKeyword("soplete")
 
         head = keywordinstance.get_head()
         edges = list(keywordinstance.iter_edges(head))
         self.assertEqual(len(edges), 1)
-        self.assertIsInstance(edges[0][0], unicode)
-        self.assertEqual(edges[0][0], u"uranium:keyword")
-        self.assertIsInstance(edges[0][1], unicode)
-        self.assertEqual(edges[0][1], u'soplete')
+        self.assertIsInstance(edges[0][0], str)
+        self.assertEqual(edges[0][0], "uranium:keyword")
+        self.assertIsInstance(edges[0][1], str)
+        self.assertEqual(edges[0][1], 'soplete')
 
         # With language
         HasKeyword.language = "en"
@@ -79,18 +79,18 @@ class TestDSL(unittest.TestCase):
         head = keywordinstance.get_head()
         edges = list(keywordinstance.iter_edges(head))
         self.assertEqual(len(edges), 1)
-        self.assertIsInstance(edges[0][1], unicode)
-        self.assertEqual(edges[0][1], u'"soplete"@en')
+        self.assertIsInstance(edges[0][1], str)
+        self.assertEqual(edges[0][1], '"soplete"@en')
 
         # With sanitize
         HasKeyword.sanitize = staticmethod(lambda x: x.upper())
-        keywordinstance = HasKeyword(u"soplete")
+        keywordinstance = HasKeyword("soplete")
 
         head = keywordinstance.get_head()
         edges = list(keywordinstance.iter_edges(head))
         self.assertEqual(len(edges), 1)
-        self.assertIsInstance(edges[0][1], unicode)
-        self.assertEqual(edges[0][1], u'"SOPLETE"@en')
+        self.assertIsInstance(edges[0][1], str)
+        self.assertEqual(edges[0][1], '"SOPLETE"@en')
 
 
 if __name__ == "__main__":

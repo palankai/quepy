@@ -42,8 +42,8 @@ class TestSparqlGeneration(unittest.TestCase):
                                      re.DOTALL)
 
     def _standard_check(self, s, e):
-        self.assertIsInstance(s, unicode)
-        vs = [u"x{}".format(i) for i in xrange(len(e))]
+        self.assertIsInstance(s, str)
+        vs = ["x{}".format(i) for i in range(len(e))]
         for var in vs:
             self.assertIn(var, s)
 
@@ -58,8 +58,8 @@ class TestSparqlGeneration(unittest.TestCase):
                 self.assertNotEqual(self._sparql_line.match(line), None, s)
 
     def test_sparql_takes_unicode(self):
-        e = gen_fixedtype(u"·̣─@łæßð~¶½")
-        e += gen_datarel(u"tµŧurułej€", u"←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
+        e = gen_fixedtype("·̣─@łæßð~¶½")
+        e += gen_datarel("tµŧurułej€", "←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
         _, s = expression_to_sparql(e)
         self._standard_check(s, e)
         self._sparql_check(s)
@@ -67,7 +67,7 @@ class TestSparqlGeneration(unittest.TestCase):
     @unittest.skip("should be fixed")
     def test_sparql_ascii_stress(self):
         seed("sacala dunga dunga dunga")
-        for _ in xrange(100):
+        for _ in range(100):
             expression = random_expression(only_ascii=True)
             _, s = expression_to_sparql(expression)
             self._standard_check(s, expression)
@@ -75,7 +75,7 @@ class TestSparqlGeneration(unittest.TestCase):
 
     def test_sparql_stress(self):
         seed("sacala dunga dunga dunga")
-        for _ in xrange(100):
+        for _ in range(100):
             expression = random_expression()
             try:
                 _, s = expression_to_sparql(expression)
@@ -87,14 +87,14 @@ class TestSparqlGeneration(unittest.TestCase):
             self._sparql_check(s)
 
     def test_sparql_takes_fails_ascii1(self):
-        e = gen_fixedtype("a")
-        e += gen_datarel("b", "c")
-        e = gen_fixedrelation("d", e)
+        e = gen_fixedtype(b"a")
+        e += gen_datarel(b"b", b"c")
+        e = gen_fixedrelation(b"d", e)
         self.assertRaises(ValueError, expression_to_sparql, e)
 
     def test_sparql_takes_fails_ascii2(self):
-        e = gen_fixedtype("·̣─@łæßð~¶½")
-        e += gen_datarel("tµŧurułej€", "←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@")
+        e = gen_fixedtype("·̣─@łæßð~¶½".encode())
+        e += gen_datarel("tµŧurułej€".encode(), "←ðßðæßđæßæđßŋŋæ @~~·ŋŋ·¶·ŋ“¶¬@@".encode())
         self.assertRaises(ValueError, expression_to_sparql, e)
 
 

@@ -13,7 +13,7 @@ from quepy import settings
 from quepy.encodingpolicy import assert_valid_encoding
 
 logger = logging.getLogger("quepy.tagger")
-PENN_TAGSET = set(u"$ `` '' ( ) , -- . : CC CD DT EX FW IN JJ JJR JJS LS MD "
+PENN_TAGSET = set("$ `` '' ( ) , -- . : CC CD DT EX FW IN JJ JJR JJS LS MD "
                   "NN NNP NNPS NNS PDT POS PRP PRP$ RB RBR RBS RP SYM TO UH "
                   "VB VBD VBG VBN VBP VBZ WDT WP WP$ WRB".split())
 
@@ -31,8 +31,8 @@ class Word(object):
     Contains *token*, *lemma*, *pos tag* and optionally a *probability* of
     that tag.
     """
-    _encoding_attrs = u"token lemma pos".split()
-    _attrs = _encoding_attrs + [u"prob"]
+    _encoding_attrs = "token lemma pos".split()
+    _attrs = _encoding_attrs + ["prob"]
 
     def __init__(self, token, lemma=None, pos=None, prob=None):
         self.pos = pos
@@ -46,11 +46,11 @@ class Word(object):
         object.__setattr__(self, name, value)
 
     def __unicode__(self):
-        attrs = (getattr(self, name, u"-") for name in self._attrs)
-        return u"|".join(str(x) for x in attrs)
+        attrs = (getattr(self, name, "-") for name in self._attrs)
+        return "|".join(str(x) for x in attrs)
 
     def __repr__(self):
-        return unicode(self)
+        return str(self)
 
 
 def get_tagger():

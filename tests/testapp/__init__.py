@@ -12,4 +12,4 @@
 Init for testapp quepy.
 """
 
-from basic import *
+from .basic import *
